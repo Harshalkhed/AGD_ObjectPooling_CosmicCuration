@@ -1,6 +1,7 @@
 using UnityEngine;
 using CosmicCuration.VFX;
 using CosmicCuration.Audio;
+using CosmicCuration.Enemy;
 
 namespace CosmicCuration.Bullets
 {
@@ -18,8 +19,11 @@ namespace CosmicCuration.Bullets
 
         public void ConfigureBullet(Transform spawnTransform)
         {
+            bulletView.gameObject.SetActive(true);
             bulletView.transform.position = spawnTransform.position;
             bulletView.transform.rotation = spawnTransform.rotation;
+            
+
         }
 
         public void UpdateBulletMotion() => bulletView.transform.Translate(Vector2.up * Time.deltaTime * bulletScriptableObject.speed);
@@ -31,7 +35,10 @@ namespace CosmicCuration.Bullets
                 collidedGameObject.GetComponent<IDamageable>().TakeDamage(bulletScriptableObject.damage);
                 GameService.Instance.GetSoundService().PlaySoundEffects(SoundType.BulletHit);
                 GameService.Instance.GetVFXService().PlayVFXAtPosition(VFXType.BulletHitExplosion, bulletView.transform.position);
-                Object.Destroy(bulletView.gameObject);
+                //Object.Destroy(bulletView.gameObject);
+                bulletView.gameObject.SetActive(false);
+                GameService.Instance.GetPlayerService().ReturnBulletToPool(this);
+                
             }
         }
     }

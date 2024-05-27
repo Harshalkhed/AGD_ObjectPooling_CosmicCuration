@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace CosmicCuration.Bullets
@@ -9,12 +10,12 @@ namespace CosmicCuration.Bullets
 
     public class BulletPool
     {
-        private BulletView bulletView;
+        private BulletView bulletPrefab;
         private BulletScriptableObject bulletScriptableObject;
         private List<PooledBullet> pooledBullets = new List<PooledBullet>();
-        public BulletPool(BulletView bulletView, BulletScriptableObject bulletScriptableObject)
+        public BulletPool(BulletView bulletPrefab , BulletScriptableObject bulletScriptableObject)
         {
-            this.bulletView = bulletView;
+            this.bulletPrefab = bulletPrefab;
             this.bulletScriptableObject = bulletScriptableObject;
             
         }
@@ -24,11 +25,7 @@ namespace CosmicCuration.Bullets
             if (pooledBullets.Count > 0)
             {
                 PooledBullet pooledBullet = pooledBullets.Find(item => !item.isUsed);
-                /*
-                pooledBullet.Bullet = new BulletController(bulletView,bulletScriptableObject);
-                pooledBullet.isUsed = true;
-                pooledBullets.Add(pooledBullet);
-                */
+               
                 if (pooledBullet != null)
                 {
                     {
@@ -43,11 +40,18 @@ namespace CosmicCuration.Bullets
         private BulletController CreateNewPooledBullet()
         {
             PooledBullet pooledBullet = new PooledBullet();
-            pooledBullet.Bullet = new BulletController(bulletView, bulletScriptableObject);
+            pooledBullet.Bullet = new BulletController(bulletPrefab, bulletScriptableObject);
             pooledBullet.isUsed = true;
+            pooledBullets.Add(pooledBullet);
             return pooledBullet.Bullet;
         }
 
+        public void ReturnToBulletPool(BulletController returnedBullet)
+        {
+            PooledBullet pooledBullet=pooledBullets.Find(item=>item.Bullet.Equals(returnedBullet));
+            pooledBullet.isUsed=false;
+            
+        }
 
 
         public class PooledBullet
