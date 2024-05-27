@@ -8,15 +8,15 @@ namespace CosmicCuration.Enemy
 {
     public class EnemyPool
     {
-        private EnemyView enemyView;
+        private EnemyView enemyPrefab;
         private EnemyScriptableObject enemyScriptableObject;
         private EnemyData enemyData;
         private List<PooledEnemy> pooledEnemies=new List<PooledEnemy>();
 
-        public EnemyPool(EnemyView enemyView,EnemyScriptableObject enemyScriptableObject)
+        public EnemyPool(EnemyView enemyPrefab, EnemyData enemyData)
         { 
-         this.enemyView = enemyView;
-         this.enemyScriptableObject = enemyScriptableObject;
+         this.enemyPrefab = enemyPrefab;
+      this.enemyData = enemyData;
             
         }
 
@@ -37,12 +37,13 @@ namespace CosmicCuration.Enemy
         private EnemyController CreateNewPoolEnemy()
         {
             PooledEnemy pooledEnemy = new PooledEnemy();
-            pooledEnemy.enemy = new EnemyController(enemyView, enemyScriptableObject.enemyData);
+            pooledEnemy.enemy = CreateEnemy();
             pooledEnemy.isUsed = true;
             pooledEnemies.Add(pooledEnemy);
             return pooledEnemy.enemy;
         }
 
+        private EnemyController CreateEnemy()=> new EnemyController(enemyPrefab,enemyData);
         public void ReturnToEnemyPool(EnemyController returnrdenemy)
         {
             PooledEnemy pooledEnemy = pooledEnemies.Find(item => item.enemy.Equals(returnrdenemy));

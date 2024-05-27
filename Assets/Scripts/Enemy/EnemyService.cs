@@ -24,7 +24,7 @@ namespace CosmicCuration.Enemy
         {
             this.enemyPrefab = enemyPrefab;
            this.enemyScriptableObject = enemyScriptableObject;
-            enemyPool=new EnemyPool(enemyPrefab,enemyScriptableObject);
+            enemyPool=new EnemyPool(enemyPrefab,enemyScriptableObject.enemyData);
             InitializeVariables();
         }
 
