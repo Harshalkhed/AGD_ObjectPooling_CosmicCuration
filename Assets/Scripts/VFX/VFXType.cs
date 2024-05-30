@@ -5,5 +5,5 @@ namespace CosmicCuration.VFX
         PlayerExplosion,
         EnemyExplosion,
         BulletHitExplosion
-    } 
+    }
 }
